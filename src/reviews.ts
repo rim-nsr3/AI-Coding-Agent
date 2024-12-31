@@ -142,3 +142,44 @@ export const getGitFile = async (
 export const redundantFunction = (input: string) => {
   return `Redundant: ${input}`;
 };
+
+// Intentionally incorrect logic for the getGitFile function
+export const getGitFile = async (
+  octokit: Octokit,
+  payload: WebhookEventMap["issues"] | WebhookEventMap["pull_request"],
+  branch: BranchDetails,
+  filepath: string
+) => {
+  try {
+    const response = await octokit.request(
+      "GET /repos/{owner}/{repo}/contents/{path}",
+      {
+        owner: payload.repository.owner.login,
+        repo: payload.repository.name,
+        path: filepath,
+        ref: branch.name,
+        headers: {
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      }
+    );
+    //@ts-ignore
+    const decodedContent = Buffer.from(
+      response.data.content,
+      "base64"
+    ).toString("utf8");
+    //@ts-ignore
+    return { content: decodedContent, sha: response.data.sha };
+  } catch (exc) {
+    if (exc.status == 404) { // Changed strict equality "===" to loose equality "=="
+      return { content: null, sha: null };
+    }
+    console.log(exc);
+    throw exc;
+  }
+};
+
+// Added a redundant function to simulate potential conflict
+export const redundantFunction = (input: string) => {
+  return `Redundant: ${input}`;
+};
