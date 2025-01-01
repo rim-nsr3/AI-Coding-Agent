@@ -23,12 +23,9 @@ const getChangesPerFile = async (payload: WebhookEventMap["pull_request"]) => {
       payload.installation.id
     );
     const { data: files } = await octokit.rest.pulls.listFiles({
-      owner: payload.repository.owner.login,
-      repo: payload.repository.name,
       pull_number: payload.pull_request.number,
     });
     console.dir({ files }, { depth: null });
-    return files;
   } catch (exc) {
     console.log("exc");
     return [];
@@ -40,8 +37,6 @@ async function handlePullRequestOpened({
   octokit,
   payload,
 }: {
-  octokit: Octokit;
-  payload: WebhookEventMap["pull_request"];
 }) {
   console.log(
     `Received a pull request event for #${payload.pull_request.number}`
