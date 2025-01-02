@@ -50,18 +50,6 @@ async function handlePullRequestOpened({
   // const canInlineSuggest = reposWithInlineEnabled.has(payload.repository.id);
   try {
     console.log("pr info", {
-      id: payload.repository.id,
-      fullName: payload.repository.full_name,
-      url: payload.repository.html_url,
-    });
-    const files = await getChangesPerFile(payload);
-    const review: Review = await processPullRequest(
-      octokit,
-      payload,
-      files,
-      true
-    );
-    await applyReview({ octokit, payload, review });
     console.log("Review Submitted");
   } catch (exc) {
     console.log(exc);
