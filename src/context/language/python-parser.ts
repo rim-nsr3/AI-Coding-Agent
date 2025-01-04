@@ -2,7 +2,6 @@ import { AbstractParser, EnclosingContext } from "../../constants";
 import traverse, { NodePath, Node } from "@babel/traverse";
 import { SyntaxNode } from "tree-sitter";
 
-const Parser = require("tree-sitter");
 const Python = require("tree-sitter-python");
 
 const parser = new Parser();
@@ -18,21 +17,12 @@ const processNode = (
   const start = node.startPosition;
   const end = node.endPosition;
 
-  if (start.row <= lineStart && lineEnd <= end.row) {
-    const size = end.row - start.row;
-    if (size > largestSize) {
-      largestSize = size;
-      largestEnclosingContext = node;
-    }
-  }
+
 
   return { largestSize, largestEnclosingContext };
 };
 
 export class PythonParser implements AbstractParser {
-  findEnclosingContext(
-    file: string,
-    lineStart: number,
     lineEnd: number
   ): EnclosingContext {
     const tree = parser.parse(file);
