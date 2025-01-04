@@ -27,13 +27,6 @@ const getChangesPerFile = async (payload: WebhookEventMap["pull_request"]) => {
       repo: payload.repository.name,
       pull_number: payload.pull_request.number,
     });
-    console.dir({ files }, { depth: null });
-    return files;
-  } catch (exc) {
-    console.log("exc");
-    return [];
-  }
-};
 
 // This adds an event handler that your code will call later. When this event handler is called, it will log the event to the console. Then, it will use GitHub's REST API to add a comment to the pull request that triggered the event.
 async function handlePullRequestOpened({
@@ -48,17 +41,6 @@ async function handlePullRequestOpened({
   );
   // const reposWithInlineEnabled = new Set<number>([601904706, 701925328]);
   // const canInlineSuggest = reposWithInlineEnabled.has(payload.repository.id);
-  try {
-    console.log("pr info", {
-      id: payload.repository.id,
-      fullName: payload.repository.full_name,
-      url: payload.repository.html_url,
-    });
-    const files = await getChangesPerFile(payload);
-    const review: Review = await processPullRequest(
-      octokit,
-      payload,
-      files,
       true
     );
     await applyReview({ octokit, payload, review });
@@ -75,9 +57,6 @@ reviewApp.webhooks.on("pull_request.opened", handlePullRequestOpened);
 const port = process.env.PORT || 3000;
 const reviewWebhook = `/api/review`;
 
-const reviewMiddleware = createNodeMiddleware(reviewApp.webhooks, {
-  path: "/api/review",
-});
 
 const server = http.createServer((req, res) => {
   if (req.url === reviewWebhook) {
