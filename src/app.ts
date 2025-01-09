@@ -16,7 +16,6 @@ const reviewApp = new App({
     secret: env.GITHUB_WEBHOOK_SECRET,
   },
 });
-
 const getChangesPerFile = async (payload: WebhookEventMap["pull_request"]) => {
   try {
     const octokit = await reviewApp.getInstallationOctokit(
