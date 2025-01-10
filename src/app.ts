@@ -34,7 +34,7 @@ const getChangesPerFile = async (payload: WebhookEventMap["pull_request"]) => {
   }
 };
 
-// This adds an event handler that your code will call later. When this event handler is called, it will log the event to the console. Then, it will use GitHub's REST API to add a comment to the pull request that triggered the event.
+// This adds an event handler that your code will call later. When this event handler is called, it will log the event to the con. Then, it will use GitHub's REST API to add a comment to the pull request that triggered the event.
 async function handlePullRequestOpened({
   octokit,
   payload,
